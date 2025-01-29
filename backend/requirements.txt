@@ -1,0 +1,7 @@
+pydantic
+psycopg2
+fastapi
+uvicorn
+SQLalchemy
+email-validator
+psycopg2-binary

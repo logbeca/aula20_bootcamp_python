@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    networks:
+      - mynetwork  # criar rede/lan para as redes verem as outras
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app
+    environment:
+      DATABASE_URL: postgresql://user:password@postgres/mydatabase
+    ports:
+      - "8000:8000"  #porta 8000 no meu computador será a porta 8000 no docker
+    depends_on:
+      - postgres
+    networks:
+      - mynetwork
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "8501:8501"
+    networks:
+      - mynetwork    
+networks:
+  mynetwork:  # criar rede/lan para as redes verem as outras
+
+volumes: #docker vai enxegar o path e criar um arquivo aqui
+  postgres_data:
+
+#docker compose up
+#http://localhost:8000/docs
